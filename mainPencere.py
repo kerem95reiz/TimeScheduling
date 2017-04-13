@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QHBoxLayout,
     QAction, QListWidget, QListWidgetItem, QMessageBox
 import databaseConnection
 
-
+ 
 class anaPencere(QMainWindow):
     def __init__(self):
         super(anaPencere, self).__init__()
