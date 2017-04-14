@@ -1,14 +1,14 @@
 import sys
 
-from PyQt5.QtGui import QBrush
+from PyQt5 import QtGui
 
 from bilgiGirrmeYeri import penceremiz
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QHBoxLayout, QVBoxLayout, QWidget, QListView, \
-    QAction, QListWidget, QListWidgetItem, QMessageBox
+    QAction, QListWidget, QListWidgetItem, QMessageBox, QProgressBar
 import databaseConnection
 
- 
+
 class anaPencere(QMainWindow):
     def __init__(self):
         super(anaPencere, self).__init__()
@@ -19,6 +19,40 @@ class anaPencere(QMainWindow):
         self.width = 700
         self.height = 400
         self.pencereyi_olustur()
+
+        # MENUBAR
+        self.statusBar()
+
+        mainMenu = self.menuBar()
+
+        self.openTasksMenu = QAction("Tasks", self)
+        self.openTasksMenu.setStatusTip("Taskleri acmak uzeresin")
+        self.openTasksMenu.triggered.connect(self.openTasks)
+        self.pencereler = mainMenu.addMenu('Pencereler')
+        self.pencereler.addAction(self.openTasksMenu)
+
+        self.openFinanceMenu = QAction("Financial", self)
+        self.openFinanceMenu.setStatusTip("Finance bir goz at")
+        self.openFinanceMenu.triggered.connect(self.openFinance)
+        self.pencereler.addAction(self.openFinanceMenu)
+
+        self.openGenerelMenu = QAction('Generel', self)
+        self.openGenerelMenu.setStatusTip('Generele bir goz at')
+        self.openGenerelMenu.triggered.connect(self.openGenerel)
+        self.pencereler.addAction(self.openGenerelMenu)
+
+    @pyqtSlot()
+    def openTasks(self):
+        print("Burada Tasks penceresini acacagiz")
+
+    @pyqtSlot()
+    def openFinance(self):
+        print("Burada finance bir goz atacagiz, sonradan :D")
+
+    @pyqtSlot()
+    def openGenerel(self):
+        print("Burada da Genel bi bakis acisi elde edevcegiz")
+
 
     def pencereyi_olustur(self):
         self.setWindowTitle(self.title)
@@ -55,7 +89,6 @@ class anaPencereIcerigi(QWidget):
         # self.tasks_list.setModelColumn(3)
         self.tasks_list.doubleClicked.connect(self.listeye_tiklandi)
 
-
         #LAYOUT
         self.yanLayoutVB = QVBoxLayout()
         self.yanLayoutVB.addWidget(self.gorevEkleButton)
@@ -72,6 +105,9 @@ class anaPencereIcerigi(QWidget):
         self.anaLayoutHB.addLayout(self.sagYandakiLayout, 7)
 
         self.setLayout(self.anaLayoutHB)
+
+    def birFormat(self):
+        dialog = self.numberformatdlg2.nu
 
     # METHODS
 
