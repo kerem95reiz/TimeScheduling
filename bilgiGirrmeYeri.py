@@ -1,8 +1,8 @@
 import sys
-
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLineEdit, QVBoxLayout, QWidget
-from databaseConnection import db_connect
+from databaseConnection import DbConnect, DatabaseConnection
+
 
 class penceremiz(QWidget):
     def __init__(self):
@@ -13,7 +13,7 @@ class penceremiz(QWidget):
         self.width = 500
         self.height = 350
         self.pencereninKendisiniOlustur()
-
+        self.db_conn = DatabaseConnection()
 
     def pencereninKendisiniOlustur(self):
         self.setWindowTitle(self.nameOfTheWindow)
@@ -55,9 +55,10 @@ class penceremiz(QWidget):
     # function degilde string beklendigine dair
     @pyqtSlot()
     def bilgileri_al(self):
-        db_bag = db_connect()
+        db_bag = DbConnect()
         # db_bag.create_table()
-        db_bag.inserting_new_information(self.konuBasligi.text(), self.ismi.text(), self.oncelik.text(), self.sontarih.text(), self.yapisSuresi.text())
+        # db_bag.inserting_new_information(self.konuBasligi.text(), self.ismi.text(), self.oncelik.text(), self.sontarih.text(), self.yapisSuresi.text())
+        self.db_conn.insert_doc(self.konuBasligi.text(), self.ismi.text(), self.oncelik.text(), self.sontarih.text(), self.yapisSuresi.text())
         self.close()
 
 

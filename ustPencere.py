@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QTabBar, QMainWindow, QTabWidget, QWidget
 import mainPencere
 
+
 class ust_pencere(QMainWindow):
 
     def __init__(self):

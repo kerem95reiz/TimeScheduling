@@ -1,9 +1,10 @@
 import sys
 sys.path.append('/usr/local/lib/python2.7/dist-packages/')
 import sqlite3
+from pymongo import MongoClient
 
 
-class db_connect(object):
+class DbConnect(object):
 
     def __init__(self):
         self.conn = sqlite3.connect('timeSchesuling.db')
@@ -16,7 +17,8 @@ class db_connect(object):
 
     def inserting_new_information(self, ust_konu, ders_adi, oncelik, son_bitis_tarihi, tahmini_yapis_suresi):
 
-        aciliyet = (int(oncelik)*20 + int(tahmini_yapis_suresi)*20 + (20 - int(son_bitis_tarihi))*10*70)/100
+        # aciliyet = (int(oncelik)*20 + int(tahmini_yapis_suresi)*20 + (20 - int(son_bitis_tarihi))*10*70)/100
+        aciliyet = oncelik
         self.conn.execute("INSERT INTO yapilacaklar VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%d')"
                           % (self.cursor.execute("SELECT COUNT(*) FROM yapilacaklar;"), ust_konu, ders_adi, oncelik, son_bitis_tarihi, tahmini_yapis_suresi, aciliyet))
         self._committing()
@@ -36,7 +38,6 @@ class db_connect(object):
         self._committing()
         return eleman
 
-
     def delete_the_clicked_row(self, anahtar):
         # Henuz herhangi bir sey silinmiyor!!!
         self.cursor.execute("DELETE FROM yapilacaklar WHERE Liste_Indexi='%s'" % anahtar)
@@ -45,6 +46,37 @@ class db_connect(object):
 
     def close_db_connection(self):
         self.conn.close()
+
+
+class DatabaseConnection:
+
+    def __init__(self):
+        self.host = 'localhost'
+        self.port = 27017
+        self.collection_name = 'todos'
+        self.database_name = 'todo_database'
+        self.client = MongoClient(host=self.host, port=self.port)
+
+        self.database = self.client.get_database(self.database_name)
+        self.collection = self.database[self.collection_name]
+
+    def insert_doc(self, name, todo, priority, deadline, estimated_duration):
+        query = {
+            "name": name,
+            "todo": todo,
+            "priority": priority,
+            "deadline": deadline,
+            "estimated_duration": estimated_duration
+        }
+        id_of_inserted_object = self.collection.insert(query)
+        return id_of_inserted_object
+
+    def get_all_docs(self):
+        return self.collection.find()
+
+    def remove_item(self, item_name):
+        query = {"name": item_name}
+        self.collection.remove(query)
 
 
 '''
